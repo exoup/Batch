@@ -17,14 +17,14 @@ if %ERRORLEVEL% EQU 0 (
                     ECHO MsiExec uninstallation command found!
                     ECHO Uninstall String: !Uninstall!
                     ECHO Trying silent MSI uninstallation.
-					!uninstall!
-					ECHO Uninstall complete.
+		    !uninstall!
+		    ECHO Uninstall complete.
                         ) ELSE (
                     ECHO Exe uninstallation command found!
                     ECHO UninstallString: !Uninstall!
                     ECHO Trying silent .exe uninstallation 
                     !uninstall! /s
-					ECHO Uninstall complete.
+		    ECHO Uninstall complete.
                         )
             )
         ) ELSE (
