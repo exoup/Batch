@@ -1,2 +1,2 @@
 # Batch-for-work
-<h2>When work is restrictive on PowerShell use but Batch is just fine.</h2>
+<h2>When it's restrictive on PowerShell use but Batch is just fine.</h2>
