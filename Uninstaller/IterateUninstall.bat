@@ -11,7 +11,7 @@ if %ERRORLEVEL% EQU 0 (
             set Uninstall=!key!
             ECHO Registry Key: !key!
             for /f "tokens=2*" %%d in ('reg query "!key!" /v "UninstallString"') do (
-                set unkey=%%e
+                set Uninstall=%%e
                 ECHO ####CHECKING UNINSTALL####
                 if /i "!Uninstall:~0,3!" EQU "Msi" (
                     ECHO MsiExec uninstallation command found!
