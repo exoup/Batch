@@ -2,28 +2,28 @@
 SETLOCAL EnableDelayedExpansion
 
 set regpath=HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall
-set SoftName=vc
-reg query "%regpath%" /f "%SoftName%" /s 2>&1>nul
+set SoftName=
+reg query "%regpath%" /f "%SoftName%" /s /d |findstr "DisplayName" 2>&1>nul
 if %ERRORLEVEL% EQU 0 (
     for /f "tokens=1,2*" %%a in ('reg query "%regpath%" /s /d /f "%SoftName%"') do (
         if "%%a"=="DisplayName" (
-            ECHO Found %%c
+            ECHO Found: %%c
             set Uninstall=!key!
             ECHO Registry Key: !key!
             for /f "tokens=2*" %%d in ('reg query "!key!" /v "UninstallString"') do (
                 set Uninstall=%%e
-                ECHO ####CHECKING UNINSTALL####
+                REM Checking uninstall type
                 if /i "!Uninstall:~0,3!" EQU "Msi" (
-                        ECHO MsiExec uninstallation command found!
-                        ECHO Uninstall String: !Uninstall!
+						set Uninstall=!Uninstall:/I=/X!
+                        ECHO Uninstallation command found: !Uninstall!
                         ECHO Trying silent MSI uninstallation.
-                        !uninstall!
+                        !Uninstall!
                         ECHO Uninstall complete.
                             ) ELSE (
-                        ECHO Exe uninstallation command found!
-                        ECHO UninstallString: !Uninstall!
-                        ECHO Trying silent .exe uninstallation 
-                        !uninstall! /s
+                        ECHO Uninstallation command found: !Uninstall!
+                        ECHO Trying silent .exe uninstallation
+						REM Just throwing parameters at a wall, but it probably works for my need.
+                        !Uninstall! /s /q /silent /quiet
                         ECHO Uninstall complete.
                     )
             )
