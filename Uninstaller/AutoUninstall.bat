@@ -2,7 +2,7 @@
 SETLOCAL EnableDelayedExpansion
 
 set regpath=HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall
-set SoftName=AnyDesk
+set SoftName=
 reg query "%regpath%" /f "%SoftName%" /s /d |findstr "DisplayName" 2>&1>nul
 if %ERRORLEVEL% EQU 0 (
     for /f "tokens=1,2*" %%a in ('reg query "%regpath%" /s /d /f "%SoftName%"') do (
