@@ -14,7 +14,7 @@ if %ERRORLEVEL% EQU 0 (
                 set Uninstall=%%e
                 REM Checking uninstall type
                 if /i "!Uninstall:~0,3!" EQU "Msi" (
-						set Uninstall=!Uninstall:/I=/X!
+			set Uninstall=!Uninstall:/I=/X!
                         ECHO Uninstallation command found: !Uninstall!
                         ECHO Trying silent MSI uninstallation.
                         !Uninstall!
@@ -22,7 +22,7 @@ if %ERRORLEVEL% EQU 0 (
                             ) ELSE (
                         ECHO Uninstallation command found: !Uninstall!
                         ECHO Trying silent .exe uninstallation
-						REM Just throwing parameters at a wall, but it probably works for my need.
+			REM Just throwing parameters at a wall, but it probably works for my need.
                         !Uninstall! /s /q /silent /quiet
                         ECHO Uninstall complete.
                     )
