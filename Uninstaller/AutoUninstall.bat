@@ -14,9 +14,10 @@ if %ERRORLEVEL% EQU 0 (
             for /f "tokens=2*" %%d in ('reg query "!key!" /v "UninstallString"') do (
                 set Uninstall=%%e
                 REM Checking uninstall type
-                if /i "!Uninstall:~0,3!" EQU "Msi" (
-                        set Uninstall=!Uninstall:/I=/X!
-                        ECHO Uninstallation command found: !Uninstall!
+                if /i "!Uninstall:~0,3!"=="Msi" (
+                        REM Catch-all replacement for when uninstall string is /I or /X
+                        set Uninstall=!Uninstall:*{=MsiExec.exe /qn /norestart /X{!
+                        ECHO Uninstallation command found: "!Uninstall!"
                         ECHO Trying silent MSI uninstallation.
                         !Uninstall!
                         ECHO Uninstall complete.
