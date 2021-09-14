@@ -4,6 +4,7 @@ Supply named program after "set SoftName=" and it should iterate through to chec
 TODO:  
 Better comment  
 First check for QuietUninstallString, else UninstallString
+Add safety valve for blank software entry  
 v Add check for when software installed in both registry locations v  
 ~~Add section to check non-32bit software (i.e. HKLM\Software\Microsoft)~~  
 ~~Better iteration(Not GOTO:end but beginning)~~  

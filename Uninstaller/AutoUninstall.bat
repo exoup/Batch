@@ -5,7 +5,7 @@ set regpath64=HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall
 set regpath32=HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall
 set regpath=%regpath64%
 set regcheck=0
-set SoftName=C++
+set SoftName=!!DONOTLEAVEBLANK!!
 
 :BEGIN
 reg query "%regpath%" /f "%SoftName%" /s /d |findstr "DisplayName" 2>&1>nul
@@ -23,13 +23,13 @@ if %ERRORLEVEL% EQU 0 (
                         set Uninstall=!Uninstall:*{=MsiExec.exe /qn /norestart /X{!
                         ECHO Uninstallation command found: "!Uninstall!"
                         ECHO Trying silent MSI uninstallation.
-                        REM !Uninstall!
+                        !Uninstall!
                         ECHO Uninstall complete.
                             ) ELSE (
                         ECHO Uninstallation command found: !Uninstall!
                         ECHO Trying silent .exe uninstallation
                         REM Just throwing parameters at a wall, but it probably works for my need.
-                        REM !Uninstall! /s /q /silent /quiet
+                        !Uninstall! /s /q /silent /quiet
                         ECHO Uninstall complete.
                     )
             )
@@ -48,7 +48,7 @@ GOTO BEGIN
 )
 if %regcheck% EQU 1 (
 ECHO %SoftName% not found in %regpath%.
-ECHO %SoftName% not installed at this location.
+ECHO %SoftName% not installed.
 GOTO:eof
 )
 )
