@@ -23,13 +23,14 @@ if %ERRORLEVEL% EQU 0 (
                         set Uninstall=!Uninstall:*{=MsiExec.exe /qn /norestart /X{!
                         ECHO Uninstallation command found: "!Uninstall!"
                         ECHO Trying silent MSI uninstallation.
-                        START /W !Uninstall!
+                        START /W "MSI" !Uninstall!
                         ECHO Uninstall complete.
                             ) ELSE (
                         ECHO Uninstallation command found: !Uninstall!
                         ECHO Trying silent .exe uninstallation
-                        REM Just throwing parameters at a wall, but it probably works for my need.
-                        START /W !Uninstall! /s /q
+                        REM Just throwing parameters at a wall. 
+                        REM The exe uninstall command is in quotes and start /w takes the first quoted line as the title, so add "EXE" or some other dummy text.
+                        START /W "EXE" !Uninstall! /S /Q
                         ECHO Uninstall complete.
                     )
             )
