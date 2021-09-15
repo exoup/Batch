@@ -23,13 +23,13 @@ if %ERRORLEVEL% EQU 0 (
                         set Uninstall=!Uninstall:*{=MsiExec.exe /qn /norestart /X{!
                         ECHO Uninstallation command found: "!Uninstall!"
                         ECHO Trying silent MSI uninstallation.
-                        !Uninstall!
+                        START /W !Uninstall!
                         ECHO Uninstall complete.
                             ) ELSE (
                         ECHO Uninstallation command found: !Uninstall!
                         ECHO Trying silent .exe uninstallation
                         REM Just throwing parameters at a wall, but it probably works for my need.
-                        !Uninstall! /s /q /silent /quiet
+                        START /W !Uninstall! /s /q
                         ECHO Uninstall complete.
                     )
             )
@@ -40,15 +40,15 @@ if %ERRORLEVEL% EQU 0 (
     )
 ) ELSE (
 if %regcheck% EQU 0 (
-ECHO %SoftName% not found in %regpath%.
-ECHO Changing paths
-set regcheck=1
-set regpath=%regpath32%
-GOTO BEGIN
+    ECHO %SoftName% not found in %regpath%.
+    ECHO Changing paths
+    set regcheck=1
+    set regpath=%regpath32%
+    GOTO BEGIN
 )
 if %regcheck% EQU 1 (
-ECHO %SoftName% not found in %regpath%.
-ECHO %SoftName% not installed.
-GOTO:eof
+    ECHO %SoftName% not found in %regpath%.
+    ECHO %SoftName% not installed.
+    GOTO:eof
 )
 )
