@@ -4,8 +4,9 @@ SETLOCAL EnableDelayedExpansion
 set regpath64=HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall
 set regpath32=HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall
 set regpath=%regpath64%
+set trycount=1
 set regcheck=0
-set SoftName=!!DONOTLEAVEBLANK!!
+set SoftName=TeamViewer Host
 
 :BEGIN
 reg query "%regpath%" /f "%SoftName%" /s /d |findstr "DisplayName" 2>&1>nul
@@ -21,18 +22,25 @@ if %ERRORLEVEL% EQU 0 (
                 if /i "!Uninstall:~0,3!"=="Msi" (
                         REM Catch-all replacement for when uninstall string is /I or /X
                         set Uninstall=!Uninstall:*{=MsiExec.exe /qn /norestart /X{!
-                        ECHO Uninstallation command found: "!Uninstall!"
-                        ECHO Trying silent MSI uninstallation.
-                        START /W "MSI" !Uninstall!
-                        ECHO Uninstall complete.
+                        set SilentUninstall=!Uninstall!
+						ECHO Uninstallation command found: "!Uninstall!"
+                        ECHO Try Number: !trycount!
+                        START /W /B "" !SilentUninstall!
                             ) ELSE (
                         ECHO Uninstallation command found: !Uninstall!
-                        ECHO Trying silent .exe uninstallation
-                        REM Just throwing parameters at a wall. 
-                        REM The exe uninstall command is in quotes and start /w takes the first quoted line as the title, so add "EXE" or some other dummy text.
-                        START /W "EXE" !Uninstall! /S /Q
-                        ECHO Uninstall complete.
+                        set SilentUninstall=!Uninstall! /S
+						ECHO Try number: !trycount!
+						START /W /B "" !SilentUninstall!
                     )
+                ping -n 5 localhost 2>&1>nul
+                REM Checking if install still exists.
+                reg query "!key!" 2>&1>nul
+                if %ERRORLEVEL% EQU 0 (
+                    CALL :TRYCOUNTLOOP
+                    ) ELSE (   
+                    ECHO Uninstall Complete.
+                )
+                set trycount=1
             )
             ) ELSE (
             set str=%%a
@@ -53,3 +61,23 @@ if %regcheck% EQU 1 (
     GOTO:eof
 )
 )
+
+:TRYCOUNTLOOP
+REM Five tries to install.
+if !trycount! LSS 6 (
+    ping -n 10 localhost 2>&1>nul
+    reg query !key! 2>&1>nul
+    if %ERRORLEVEL% EQU 0 (
+        set /a trycount=trycount+1
+        ECHO Try Number: !trycount!
+        START /W /B "" !SilentUninstall!
+        GOTO TRYCOUNTLOOP
+    ) ELSE (
+    ECHO Uninstall successful after !trycount! tries.
+    EXIT /B
+    )
+)
+if !trycount! GEQ 6 (
+    ECHO Uninstall unsuccessful after !trycount! tries.
+    EXIT /B
+    )
