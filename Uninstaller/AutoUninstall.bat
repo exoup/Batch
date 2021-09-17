@@ -5,8 +5,10 @@ set regpath64=HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall
 set regpath32=HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall
 set regpath=%regpath64%
 set trycount=1
+set maxretry=4
 set regcheck=0
-set SoftName=TeamViewer Host
+set failure=0
+set SoftName=Steam
 
 :BEGIN
 reg query "%regpath%" /f "%SoftName%" /s /d |findstr "DisplayName" 2>&1>nul
@@ -25,28 +27,26 @@ if %ERRORLEVEL% EQU 0 (
                         set SilentUninstall=!Uninstall!
 						ECHO Uninstallation command found: "!Uninstall!"
                         ECHO Try Number: !trycount!
-                        START /W /B "" !SilentUninstall!
+                        ECHO START /W /B "" !SilentUninstall!
                             ) ELSE (
                         ECHO Uninstallation command found: !Uninstall!
                         set SilentUninstall=!Uninstall! /S
 						ECHO Try number: !trycount!
-						START /W /B "" !SilentUninstall!
-                    )
+						ECHO START /W /B "" !SilentUninstall!
+                        )
                 ping -n 5 localhost 2>&1>nul
                 REM Checking if install still exists.
                 reg query "!key!" 2>&1>nul
                 if %ERRORLEVEL% EQU 0 (
-                    CALL :TRYCOUNTLOOP
-                    ) ELSE (   
-                    ECHO Uninstall Complete.
-                )
+                        CALL :RETRYLOOP
+                    )
                 set trycount=1
-            )
+                )
             ) ELSE (
             set str=%%a
             if "!str:~0,4!"=="HKEY" set key=%%a
         )
-    )
+        )
 ) ELSE (
 if %regcheck% EQU 0 (
     ECHO %SoftName% not found in %regpath%.
@@ -61,23 +61,26 @@ if %regcheck% EQU 1 (
     GOTO:eof
 )
 )
-
-:TRYCOUNTLOOP
-REM Five tries to install.
-if !trycount! LSS 6 (
-    ping -n 10 localhost 2>&1>nul
-    reg query !key! 2>&1>nul
+goto:eof
+:RETRYLOOP
+ping -n 10 localhost 2>&1>nul
+if !trycount! GTR !maxretry! (
+    ECHO Uninstall failed after !trycount! tries.
+    EXIT /B
+    )
+if !trycount! LEQ !maxretry! (
+    reg query "!key!" 2>&1>nul
     if %ERRORLEVEL% EQU 0 (
         set /a trycount=trycount+1
-        ECHO Try Number: !trycount!
-        START /W /B "" !SilentUninstall!
-        GOTO TRYCOUNTLOOP
-    ) ELSE (
-    ECHO Uninstall successful after !trycount! tries.
-    EXIT /B
+        ECHO Try number: !trycount!
+        ECHO START /W /B "" !SilentUninstall!
+        GOTO RETRYLOOP
+        ) ELSE (
+    if %ERRORLEVEL% EQU 1 (
+        ECHO Uninstall successful after !trycount! tries.
+        EXIT /B
     )
 )
-if !trycount! GEQ 6 (
-    ECHO Uninstall unsuccessful after !trycount! tries.
-    EXIT /B
-    )
+)
+
+
