@@ -7,7 +7,6 @@ set regpath=%regpath64%
 set trycount=1
 set maxretry=4
 set regcheck=0
-set failure=0
 set SoftName=!!DO NOT LEAVE BLANK!!
 
 GOTO BEGIN
@@ -48,14 +47,14 @@ if %ERRORLEVEL% EQU 0 (
                         REM Catch-all replacement for when uninstall string is /I or /X
                         set Uninstall=!Uninstall:*{=MsiExec.exe /qn /norestart /X{!
                         set SilentUninstall=!Uninstall!
-						ECHO Uninstallation command found: "!Uninstall!"
+                        ECHO Uninstallation command found: "!Uninstall!"
                         ECHO Try Number: !trycount!
                         START /W /B "" !SilentUninstall!
                             ) ELSE (
                         ECHO Uninstallation command found: !Uninstall!
                         set SilentUninstall=!Uninstall! /S
-						ECHO Try number: !trycount!
-						START /W /B "" !SilentUninstall!
+                        ECHO Try number: !trycount!
+                        START /W /B "" !SilentUninstall!
                         )
                 ping -n 5 localhost 2>&1>nul
                 REM Checking if install still exists.
