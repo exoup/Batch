@@ -8,7 +8,30 @@ set trycount=1
 set maxretry=4
 set regcheck=0
 set failure=0
-set SoftName=Steam
+set SoftName=!!DO NOT LEAVE BLANK!!
+
+GOTO BEGIN
+
+:RETRYLOOP
+ping -n 10 localhost 2>&1>nul
+if !trycount! GTR !maxretry! (
+    ECHO Uninstall failed after !trycount! tries.
+    EXIT /B
+    )
+if !trycount! LEQ !maxretry! (
+    reg query "!key!" 2>&1>nul
+    if %ERRORLEVEL% EQU 0 (
+        set /a trycount=trycount+1
+        ECHO Try number: !trycount!
+        START /W /B "" !SilentUninstall!
+        GOTO RETRYLOOP
+        ) ELSE (
+    if %ERRORLEVEL% EQU 1 (
+        ECHO Uninstall successful after !trycount! tries.
+        EXIT /B
+    )
+)
+)
 
 :BEGIN
 reg query "%regpath%" /f "%SoftName%" /s /d |findstr "DisplayName" 2>&1>nul
@@ -27,12 +50,12 @@ if %ERRORLEVEL% EQU 0 (
                         set SilentUninstall=!Uninstall!
 						ECHO Uninstallation command found: "!Uninstall!"
                         ECHO Try Number: !trycount!
-                        ECHO START /W /B "" !SilentUninstall!
+                        START /W /B "" !SilentUninstall!
                             ) ELSE (
                         ECHO Uninstallation command found: !Uninstall!
                         set SilentUninstall=!Uninstall! /S
 						ECHO Try number: !trycount!
-						ECHO START /W /B "" !SilentUninstall!
+						START /W /B "" !SilentUninstall!
                         )
                 ping -n 5 localhost 2>&1>nul
                 REM Checking if install still exists.
@@ -61,26 +84,3 @@ if %regcheck% EQU 1 (
     GOTO:eof
 )
 )
-goto:eof
-:RETRYLOOP
-ping -n 10 localhost 2>&1>nul
-if !trycount! GTR !maxretry! (
-    ECHO Uninstall failed after !trycount! tries.
-    EXIT /B
-    )
-if !trycount! LEQ !maxretry! (
-    reg query "!key!" 2>&1>nul
-    if %ERRORLEVEL% EQU 0 (
-        set /a trycount=trycount+1
-        ECHO Try number: !trycount!
-        ECHO START /W /B "" !SilentUninstall!
-        GOTO RETRYLOOP
-        ) ELSE (
-    if %ERRORLEVEL% EQU 1 (
-        ECHO Uninstall successful after !trycount! tries.
-        EXIT /B
-    )
-)
-)
-
-
