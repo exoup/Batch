@@ -1,15 +1,18 @@
 @ECHO OFF
 SETLOCAL EnableDelayedExpansion
 REM SETLOCAL ENABLEEXTENSIONS
-set "debug=%2"
 set count=1
+set num=empty
 
-if [%1]==[] set /p num=Input decimal number: 
-if NOT [%1]==[] set num=%1
-if [%1]==[/d] ( 
-set debug=/d
-set /p num=Input decimal number:
+for %%P in (%*) do (
+if %%P==/d (
+set debug=%%P
+) ELSE (
+set num=%%P
 )
+)
+if "!num!"=="empty" set /p num=Input decimal number: 
+
 
 cls
 set decnum=!num!
