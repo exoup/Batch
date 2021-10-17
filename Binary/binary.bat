@@ -5,14 +5,11 @@ set count=1
 set num=empty
 
 for %%P in (%*) do (
-if %%P==/d (
-set debug=%%P
-) ELSE (
-set num=%%P
-)
+if /I %%P==/d (set debug=%%P)
+if /I %%P==/h (call :help && EXIT /b)
+if NOT %%P==/d (if NOT %%P==/h set num=%%P)
 )
 if "!num!"=="empty" set /p num=Input decimal number: 
-
 
 cls
 set decnum=!num!
@@ -32,4 +29,17 @@ ECHO ###############
 ECHO !decnum! =
 ECHO 0b!binnum!
 ECHO ###############
-pause > NUL
+pause > NUL && EXIT /b
+
+:help
+ECHO Binary.bat [%%number%%] [/d] [/h]
+ECHO.
+ECHO %%number%%
+ECHO    Passes number through program and uses that as input.
+ECHO.
+ECHO /d
+ECHO    Enables "debug" mode. Shows each step of the math.
+ECHO.
+ECHO /h
+ECHO    Shows this text!
+EXIT /b
