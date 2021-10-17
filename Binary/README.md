@@ -4,7 +4,7 @@
 To use:
  * Run the script and enter your digits.
 * `/d` = Debug mode. Prints the math and count for each step.
-Or run from command line and skip the prompt.
+* Or run from command line and skip the prompt.
 ```
 \binary.bat $number (/d)
 ```
