@@ -5,9 +5,10 @@ set count=1
 set num=empty
 
 for %%P in (%*) do (
-if /I %%P==/d (set debug=%%P)
-if /I %%P==/h (call :help && EXIT /b)
-if NOT %%P==/d (if NOT %%P==/h set num=%%P)
+set param=%%P
+if /I !param!==/d (set debug=%%P)
+if /I "!param:~0,2!"=="/h" (call :help && EXIT /b)
+if NOT !param!==/d (if NOT %%P==/h set num=%%P)
 )
 if "!num!"=="empty" set /p num=Input decimal number: 
 
@@ -32,14 +33,9 @@ ECHO ###############
 pause > NUL && EXIT /b
 
 :help
-ECHO Binary.bat [%%number%%] [/d] [/h]
+ECHO Binary.bat [%%number%%] [/d] [/h(elp)]
 ECHO.
-ECHO %%number%%
-ECHO    Passes number through program and uses that as input.
-ECHO.
-ECHO /d
-ECHO    Enables "debug" mode. Shows each step of the math.
-ECHO.
-ECHO /h
-ECHO    Shows this text!
+ECHO %%number%%       Passes number through program and uses that as input.
+ECHO /d             Enables "debug" mode. Shows each step of the math.
+ECHO /h(elp)             Shows this text!
 EXIT /b
