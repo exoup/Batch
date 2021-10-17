@@ -1,5 +1,5 @@
 ##### Simply converts decimal numbers to binary.
-<h8>Does not work for numbers greater than 1,073,741,823.</h8>
+<h8>Does not work for numbers greater than 2,147,483,647.</h8>
 
 To use:
 * `Binary.bat [%%number%%] [/d] [/h]`
