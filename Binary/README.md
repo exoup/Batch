@@ -2,9 +2,11 @@
 <h8>Does not work for numbers greater than 1,073,741,823.</h8>
 
 To use:
- * Run the script and enter your digits.
-* `/d` = Debug mode. Prints the math and count for each step.
-* Or run from command line and skip the prompt.
+* `Binary.bat [%%number%%] [/d] [/h]`
+* `%number%`     Passes number through program and uses that as input.
+* `/d`             Enables "debug" mode. Shows each step of the math.
+* `/h`             Shows this text!
+
 ```
-\binary.bat $number (/d)
+\binary.bat $number (/d) (/h)
 ```
