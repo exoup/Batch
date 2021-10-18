@@ -10,3 +10,5 @@ To use:
 ```
 \binary.bat $number (/d) (/h)
 ```
+
+* Can also just be run without parameters and will prompt for input.
