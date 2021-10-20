@@ -1,6 +1,5 @@
 @ECHO OFF
 SETLOCAL EnableDelayedExpansion
-REM SETLOCAL ENABLEEXTENSIONS
 set count=1
 set num=empty
 
@@ -37,5 +36,5 @@ ECHO Binary.bat [%%number%%] [/d] [/h(elp)]
 ECHO.
 ECHO %%number%%       Passes number through program and uses that as input.
 ECHO /d             Enables "debug" mode. Shows each step of the math.
-ECHO /h(elp)             Shows this text!
+ECHO /h(elp)        Shows this text!
 EXIT /b
