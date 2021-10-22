@@ -7,17 +7,14 @@ if NOT DEFINED rotate (set rotate=13)
 
 set /p input=Enter some text: 
 if NOT DEFINED input (set input=default)
+cls
 set "string=%input%#"
 call :loop string strlen
 call :letterarray
-
-REM ECHO !low.%lowcount%!
-
-REM ECHO !up.%upcount%!
-ECHO String Length is %strlen%
 call :strreplace
-ECHO !rotstr!
-ECHO !input!
+ECHO String: !input!
+ECHO $ROT%rotate%: !rotstr!
+ECHO Length: %strlen%
 endlocal & EXIT /b
 
 :loop
