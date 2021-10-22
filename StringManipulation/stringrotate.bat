@@ -40,7 +40,7 @@ for /L %%S in (0,1,%strlen%) do (
             if !strstub.%%S!==!low.%%M! (
                     set /a math=%%M+%rotate%
                     if !math! GTR 26 ( SET /a math-=26 )
-					call set "rotstr=!rotstr!%%low.!math!%%"
+                    call set "rotstr=!rotstr!%%low.!math!%%"
                 )
             )
         )
