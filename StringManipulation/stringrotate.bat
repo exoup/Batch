@@ -6,8 +6,9 @@ set rotate=%1
 if NOT DEFINED rotate (set rotate=13)
 
 set /p input=Enter some text: 
-if NOT DEFINED input (set input=default)
+if NOT DEFINED input (set input=DEFault)
 cls
+REM Useful string replacement: set "var=%var:?=?%" 
 set "string=%input%#"
 call :loop string strlen
 call :letterarray
@@ -24,6 +25,7 @@ EXIT /b
 
 :strreplace
 for /L %%S in (0,1,%strlen%) do (
+    set math=0
     if NOT "!string:~%%S!"=="#" (
         set strstub.%%S=!string:~%%S,1!
         for /L %%V in (!upcount!,-1,1) do (
@@ -33,6 +35,7 @@ for /L %%S in (0,1,%strlen%) do (
                     call set "rotstr=!rotstr!%%up.!math!%%"
                 )
             )
+            if "!strstub.%%S!"==" " set "rotstr=!rotstr! "
         for /L %%M in (!lowcount!,-1,1) do (
             if !strstub.%%S!==!low.%%M! (
                     set /a math=%%M+%rotate%
