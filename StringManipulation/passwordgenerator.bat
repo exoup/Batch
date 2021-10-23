@@ -16,10 +16,9 @@ set "char[!count!]=%%C"
 )
 for /L %%L in (%length%,-1,1) do (
 set /a R=!random! %% !count! + 1
-
 for %%R in (!R!) do set "randstring=!char[%%R]!!randstring!" & if !debug!==/d ECHO Random=!random! R=!R! Count=!count! Char=!char[%%R]!
 )
-ECHO !randstring! | clip & ECHO !randstring!
+ECHO !randstring!
 endlocal & EXIT /b
 
 :help
