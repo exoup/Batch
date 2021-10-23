@@ -1,15 +1,14 @@
 @ECHO OFF
 SETLOCAL EnableDelayedExpansion
 set count=1
-set num=empty
 
 for %%P in (%*) do (
 set param=%%P
 if /I !param!==/d (set debug=%%P)
-if /I "!param:~0,2!"=="/h" (call :help && EXIT /b)
+if /I "!param:~0,2!"=="/h" (call :help & EXIT /b)
 if NOT !param!==/d (if NOT %%P==/h set num=%%P)
 )
-if "!num!"=="empty" set /p num=Input decimal number: 
+if NOT DEFINED num set /p num=Input decimal number: 
 
 cls
 set decnum=!num!
