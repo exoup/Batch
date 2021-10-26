@@ -9,5 +9,5 @@ StringRotate:
 
 PasswordGenerator:
 * Enter a length in `N` and a random password will be generated for you. (Default: 16)
-* `/d` for debug mode. `/h` for help text.
-* From CLI: `passwordgenerator.bat N (/d) (/h)`
+* `/c` to copy output to clipboard. `/d` for debug mode. `/h` for help text.
+* From CLI: `passwordgenerator.bat N (/c) (/d) (/h)`
