@@ -23,7 +23,7 @@ for %%R in (!R!) do (
 )
 
 ECHO !randstring!
-if !clip!==/c ECHO !randstring!>%temp%\temprand.txt & CLIP<"%temp%\temprand.txt" && del "%temp%\temprand.txt"
+if !clip!==/c ECHO !randstring!>"%temp%\temprand.txt"& CLIP<"%temp%\temprand.txt" && del "%temp%\temprand.txt"
 endlocal & EXIT /b
 
 :help
